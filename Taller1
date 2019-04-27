@@ -1,0 +1,60 @@
+##############################################################################
+####################### Diseño Taller 1 ######################################
+##############################################################################
+
+### a.) ###
+library(nortest)
+s<-c(18.7, 46.3, 21.7, 17.8, 21.5, 19.4, 19.5, 21.3)
+c<-c(25.1, 28.4, 23.2, 26.4, 25.7, 20.3, 21.4, 24.7)
+m<-c(s,c)
+ks.test(m,"pnorm")
+shapiro.test(m)
+lillie.test(m)
+hist(m)
+qqnorm(m)
+qqline(m)
+
+### b.) Prueba t ### 
+#Inferencia cociente de varianzas:
+alpha=0.05
+fc=(sd(s)^2)/(sd(c)^2); fc
+qf(1-alpha/2, 7, 7)
+var.test(s,c,ratio=1, alternative = "two.sided",conf.level = 0.95)
+#Inferencia diferencia de medias
+tc=(mean(s)-mean(c))/sqrt((sd(s)^2)/length(s)+(sd(c)^2)/length(c));tc
+s1=sd(s)^2; s1 
+s2=sd(c)^2; s2
+xb1=mean(s);xb1
+xb2=mean(c);xb2
+t=qt(0.025,8);t
+t.test(s,c, alternative = "two.sided", conf.level = 0.95) # No rechazar, ed. Medias iguales
+
+## c.) ##
+sn<-s[s!=46.3]
+c<-c(25.1, 28.4, 23.2, 26.4, 25.7, 20.3, 21.4, 24.7)
+var.test(sn,c,ratio=1, alternative = "two.sided",conf.level = 0.95)
+qf(0.975,6,7)
+t.test(sn,c, alternative = "two.sided", conf.level = 0.95) #Rechazar, ed, Medias diferentes
+tn=qt(0.975,11);tn
+
+### d.) ###
+# La variable respuesta asociada al paciente con tiroides está siendo explicada
+# Por un efecto distinto al de si tiene facturas o no, ya que la tiroides es quien
+# determina, en ese caso, la cantidad de energía que se gasta en elmetabolismo.
+# Es decir, la tiroides podría corresponder a un factor cuyo efecto incide en la
+# energía gastada en el metabolismo y debería controlarse. 
+
+########## e.) prueba de Wilcoxon ################
+#H0: Las distribuciones  de frecuencias relativas  de las dos poblaciones son idénticas
+wilcox.test(s,c,alternative = "two.sided") # pval=0.04988 se rechaza al límite, ed, las distribuciones son diferentes
+
+### f ###
+#La prueba t de b.) las medias eran iguales y en la prueba Wilcoxon de e.), las distribuciones son diferentes
+
+### g.) ###
+wilcox.test(sn,c,alternative = "two.sided") ## No se rechaza al límite con p-val= 0.005905
+# Es decir el p-valor de la prueba Wilcoxon con el dato atípico es 0.04988 y con el dato es 0.00595
+#Son muy cercanos.
+
+### h.) ### 
+# La prueba paramétrica es más sensible a outliers.
